@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
-let CommentSchema = new mongoose.Schema({
+import { Schema, model } from 'mongoose';
+let CommentSchema = new Schema({
     PostId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'post',
         required: true
     },
     UserId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'user',
         required: true
     },
@@ -15,4 +15,4 @@ let CommentSchema = new mongoose.Schema({
         required: true
     }
 })
-module.exports = mongoose.model('comment', CommentSchema)
+export default model('comment', CommentSchema)

@@ -1,20 +1,26 @@
-const router = require("express").Router();
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
-const verifyAuth = require("../middleware/verifyAuth");
+// const router = require("express").Router();
+import {Router} from "express";
+// import { genSalt, hash} from "bcryptjs";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
+import verifyAuth from "../middleware/verifyAuth.js";
+
+const router = Router();
+
 // POST | /api/v1/register | public | register user
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
+    // CEK APAKAH SEMUA FIELDS SUDAH DIISI
     if (!name || !email || !password) {
-      res.status(400).json({
+      return res.status(400).json({
         msg: "please fill the required fields",
         success: false,
       });
     }
-
+    // CEK APAKAH EMAIL SUDAH TERDAFTAR
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({
@@ -42,16 +48,18 @@ router.post("/register", async (req, res) => {
       },
       (err, token) => {
         if (err) throw err;
-        res.status(200).json({
-          token,
+        return res.status(200).json({
+          token
         });
       }
     );
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
     res.status(400).json({ success: false });
   }
 });
+
+
 // POST api/v1/login | public | login exixting user
 router.post("/login", async (req, res) => {
   try {
@@ -62,19 +70,19 @@ router.post("/login", async (req, res) => {
         success: false,
       });
     }
-    let user = await User.findOne({ email }).select("+password");
+    let user = await findOne({ email }).select("+password");
     if (!user)
       return res.status(400).json({
         msg: "invalid credentials",
         success: false,
       });
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await compare(password, user.password);
     if (!isMatch)
       return res.status(400).json({
         msg: "invalid credentials",
         success: false,
       });
-    jwt.sign(
+    sign(
       { id: user._id },
       process.env.JWT_SECTET,
       {
@@ -111,4 +119,4 @@ router.get("/user", verifyAuth, async (req, res) => {
     res.status(500).json({ msg: "SERVER ERROR" });
   }
 });
-module.exports = router;
+export default router;

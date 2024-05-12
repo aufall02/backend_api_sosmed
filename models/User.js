@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-let UserSchema = new mongoose.Schema(
+import { Schema, model } from "mongoose";
+let UserSchema = new Schema(
   {
     name: {
       type: String,
@@ -10,7 +10,7 @@ let UserSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/],
+      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/], // REGEX UNTUK CEK FORMAT EMAIL
     },
     password: {
       type: String,
@@ -48,4 +48,4 @@ UserSchema.virtual("posts", {
   foreignField: "UserId",
   justOne: false,
 });
-module.exports = mongoose.model("user", UserSchema);
+export default model("user", UserSchema);

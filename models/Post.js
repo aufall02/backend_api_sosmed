@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
-let PostSchema = new mongoose.Schema(
+import { Schema, model } from "mongoose";
+let PostSchema = new Schema(
   {
     UserId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "user",
       required: true,
     },
@@ -58,4 +58,4 @@ PostSchema.virtual("comments", {
 });
 
 
-module.exports = mongoose.model("post", PostSchema);
+export default model("post", PostSchema);

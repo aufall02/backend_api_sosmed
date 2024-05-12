@@ -1,7 +1,13 @@
-const router = require("express").Router();
-const Post = require("../models/Post");
-const User = require("../models/User");
-const verifyAuth = require("../middleware/verifyAuth");
+// const router = require("express").Router();
+
+import {Router} from "express";
+import Post from "../models/Post.js";
+import User from "../models/User.js";
+import Comment from "../models/Comment.js";
+import verifyAuth from "../middleware/verifyAuth.js";
+
+const router = new Router();
+
 // GET | /api/v1/post/like/:id| Private | Like a post
 router.get("/like/:id", verifyAuth, async (req, res) => {
   try {
@@ -168,4 +174,4 @@ router.post('/post/comment/:id', verifyAuth,async (req, res) => {
   }
 })
 
-module.exports = router;
+export default router;

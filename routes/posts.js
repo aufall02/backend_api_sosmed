@@ -1,14 +1,17 @@
-const router = require("express").Router();
+import { Router } from "express";
+const router = Router()
 // Models
-const Post = require("../models/Post");
-const User = require("../models/User");
+// import { find, findById, create } from "../models/Post.js";
+import Post from "../models/Post.js";
+// import { findById as _findById } from "../models/User.js";
+import User from "../models/User.js";
 // MIDDLEWARE
-const verifyAuth = require("../middleware/verifyAuth");
+import verifyAuth from "../middleware/verifyAuth.js";
 // GET | /api/v1/posts | public | get all posts
 router.get("/posts", async (req, res) => {
   try {
     // populate
-    const posts = await Post.find().populate("comments").populate("posted_by");
+    const posts = await Post.find().populate("posted_by");
 
     return res.status(200).json({
       data: posts,
@@ -25,7 +28,7 @@ router.get("/followers-posts", verifyAuth, async (req, res) => {
     const get_user = await User.findById(req.user.id);
 
     // populate
-    const posts = await Post.find({ UserId: get_user.following })
+    const posts = await User.find({ UserId: get_user.following })
       .populate("comments")
       .populate("posted_by");
 
@@ -84,7 +87,7 @@ router.put("/edit-post/:id", verifyAuth, async (req, res) => {
         success: false,
       });
     }
-    if (!post.UserId == req.user.id) {
+    if (!post.UserId === req.user.id) {
       return res.status(400).json({
         success: false,
       });
@@ -115,7 +118,7 @@ router.delete("/delete-post/:id", verifyAuth, async (req, res) => {
       });
     }
 
-    if (!post.UserId == req.user.id) {
+    if (!post.UserId === req.user.id) {
       return res.status(400).json({
         success: false,
       });
@@ -132,4 +135,4 @@ router.delete("/delete-post/:id", verifyAuth, async (req, res) => {
     res.status(400).json({ success: false });
   }
 });
-module.exports = router;
+export default router;

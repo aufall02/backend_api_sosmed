@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken");
-module.exports = (req, res, next) => {
+import jwt from "jsonwebtoken";
+export default (req, res, next) => {
   const token = req.header("x-token");
   if (!token) {
     return res.status(401).json({
