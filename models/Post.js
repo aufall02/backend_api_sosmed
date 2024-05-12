@@ -40,7 +40,7 @@ PostSchema.pre("save", async function (next) {
     (date_info.getMonth() + 1) +
     "/" +
     date_info.getFullYear();
-  this.created_at = await date_into;
+  this.created_at = date_into;
 });
 
 PostSchema.virtual("posted_by", {
