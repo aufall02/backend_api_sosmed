@@ -70,19 +70,19 @@ router.post("/login", async (req, res) => {
         success: false,
       });
     }
-    let user = await findOne({ email }).select("+password");
+    let user = await User.findOne({ email }).select("+password");
     if (!user)
       return res.status(400).json({
         msg: "invalid credentials",
         success: false,
       });
-    const isMatch = await compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
       return res.status(400).json({
         msg: "invalid credentials",
         success: false,
       });
-    sign(
+    jwt.sign(
       { id: user._id },
       process.env.JWT_SECTET,
       {
@@ -100,6 +100,9 @@ router.post("/login", async (req, res) => {
     res.status(400).json({ success: false });
   }
 });
+
+
+
 // GET api/v1/user | private | get logged in user for the process of auth
 router.get("/user", verifyAuth, async (req, res) => {
   try {

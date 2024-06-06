@@ -1,12 +1,11 @@
 import { Router } from "express";
-const router = Router()
-// Models
-// import { find, findById, create } from "../models/Post.js";
 import Post from "../models/Post.js";
-// import { findById as _findById } from "../models/User.js";
 import User from "../models/User.js";
-// MIDDLEWARE
 import verifyAuth from "../middleware/verifyAuth.js";
+
+
+const router = Router()
+// MIDDLEWARE
 // GET | /api/v1/posts | public | get all posts
 router.get("/posts", async (req, res) => {
   try {
@@ -22,6 +21,8 @@ router.get("/posts", async (req, res) => {
     res.status(400).json({ success: false });
   }
 });
+
+
 // GET | /api/v1/followers-posts | private | get all posts from the users that logged in user follow
 router.get("/followers-posts", verifyAuth, async (req, res) => {
   try {
@@ -78,6 +79,7 @@ router.post("/add-new", verifyAuth, async (req, res) => {
     res.status(400).json({ success: false });
   }
 });
+
 // PUT | /api/v1/post/edit-post/:id| Private | Edit a post
 router.put("/edit-post/:id", verifyAuth, async (req, res) => {
   try {
@@ -96,7 +98,7 @@ router.put("/edit-post/:id", verifyAuth, async (req, res) => {
         UserId: req.user.id,
         title: req.body.title,
         description: req.body.description,
-        post_image: req.body.image_url,
+        post_image: req.body.image_url
       });
     }
     res.status(200).json({
@@ -108,6 +110,8 @@ router.put("/edit-post/:id", verifyAuth, async (req, res) => {
     res.status(400).json({ success: false });
   }
 });
+
+
 // DELETE | /api/v1/post/delete-post/:id | Private | delete a post
 router.delete("/delete-post/:id", verifyAuth, async (req, res) => {
   try {
